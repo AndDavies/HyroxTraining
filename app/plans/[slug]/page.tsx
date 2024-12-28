@@ -10,12 +10,22 @@ import Image from "next/image";
  */
 export const dynamic = "force-dynamic";
 
+/**
+ * Define the interface for our route's props. 
+ * This ensures TypeScript is happy with { params: { slug: string } }.
+ */
+interface PlansSlugPageProps {
+  params: {
+    slug: string;
+  };
+}
+
 /** 
- * If you want to generate some metadata, we define the param inline,
- * ignoring any “PageProps” altogether.
+ * If you want to generate some metadata, define the param 
+ * shape as PlansSlugPageProps so it matches the page's props.
  */
 export async function generateMetadata(
-  { params }: { params: { slug: string } }
+  { params }: PlansSlugPageProps
 ): Promise<Metadata> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -110,13 +120,10 @@ function QuickHitterGrid({ plan }: { plan: Plan }) {
 /**
  * The actual page for /plans/[slug].
  * 
- * We define param inline: 
- *    `export default async function Page({ params }: { params: { slug: string } })`
- * This is a very typical pattern in Next 13+.
+ * We define param inline but now the prop type references our
+ * PlansSlugPageProps interface so the compiler doesn't complain.
  */
-export default async function Page(
-  { params }: { params: { slug: string } }
-) {
+export default async function Page({ params }: PlansSlugPageProps) {
   const { slug } = params;
 
   // 1) Create a Supabase client for SSR
