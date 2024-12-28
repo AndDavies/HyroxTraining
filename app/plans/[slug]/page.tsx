@@ -1,5 +1,4 @@
 // app/plans/[slug]/page.tsx
-// @ts-ignore
 import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import Image from "next/image";
