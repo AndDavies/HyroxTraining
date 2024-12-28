@@ -1,5 +1,3 @@
-// app/plans/[slug]/page.tsx
-
 import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -15,9 +13,7 @@ export const dynamic = "force-dynamic";
  * This ensures TypeScript is happy with { params: { slug: string } }.
  */
 interface PlansSlugPageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 /** 
@@ -31,11 +27,14 @@ export async function generateMetadata(
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  // Await the params Promise here
+  const resolvedParams = await params;
+  
   // minimal fetch to build your meta
   const { data: plan } = await supabase
     .from("training_plans")
     .select("title, description")
-    .eq("slug", params.slug)
+    .eq("slug", resolvedParams.slug)
     .single();
 
   if (!plan) {
@@ -124,7 +123,8 @@ function QuickHitterGrid({ plan }: { plan: Plan }) {
  * PlansSlugPageProps interface so the compiler doesn't complain.
  */
 export default async function Page({ params }: PlansSlugPageProps) {
-  const { slug } = params;
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
 
   // 1) Create a Supabase client for SSR
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
