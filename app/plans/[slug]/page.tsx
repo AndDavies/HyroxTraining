@@ -1,9 +1,11 @@
 // app/plans/[slug]/page.tsx
+
+import { PageProps } from "@/.next/types/app/layout";
 import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import Image from "next/image";
 
-// For clarity, define our Plan type (for the DB data).
+/** A row from your `training_plans` table. Adjust to match DB columns. */
 interface Plan {
   id: string;
   title: string;
@@ -20,7 +22,20 @@ interface Plan {
   description?: string;
 }
 
-// QuickHitterGrid is a normal component that takes a Plan object
+/**
+ * 1) We define a custom type that extends or omits from PageProps
+ *    so we can override `params` with our own { slug: string } shape.
+ * 
+ *    The key part is using Omit<PageProps, "params"> to remove the default
+ *    param field, which Next's type might interpret as a Promise.
+ */
+type PlanPageProps = Omit<PageProps, "params"> & {
+  // Our custom params
+  params: {
+    slug: string;
+  };
+};
+
 function QuickHitterGrid({ plan }: { plan: Plan }) {
   const quickHitters = [
     { label: "Category", value: plan.category },
@@ -47,7 +62,9 @@ function QuickHitterGrid({ plan }: { plan: Plan }) {
             <p className="uppercase text-xs tracking-wide text-gray-400 mb-1">
               {item.label}
             </p>
-            <p className="text-lg font-semibold">{item.value || "N/A"}</p>
+            <p className="text-lg font-semibold">
+              {item.value || "N/A"}
+            </p>
           </div>
         ))}
       </div>
@@ -65,13 +82,14 @@ function QuickHitterGrid({ plan }: { plan: Plan }) {
 }
 
 /**
- * If you plan to generate dynamic metadata for SEO,
- * we inline the param type here as well. 
+ * 2) For generating metadata in Next.js,
+ *    inline the param type as well if you want.
  */
-export async function generateMetadata(
-  // Inline type for param: no separate interface
-  { params }: { params: { slug: string } }
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -96,22 +114,16 @@ export async function generateMetadata(
 }
 
 /**
- * The page function for /plans/[slug].
- * We inline the param type here as well, matching Next.js 13 expectations.
+ * 3) The SSR page function for /plans/[slug].
+ *    Notice the signature uses our 'PlanPageProps'.
  */
-export default async function PlanDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function PlanDetailPage({ params }: PlanPageProps) {
   const { slug } = params;
 
-  // Create Supabase client for SSR
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // Fetch the plan by slug
   const { data: plan, error } = await supabase
     .from("training_plans")
     .select("*")
@@ -128,7 +140,6 @@ export default async function PlanDetailPage({
 
   return (
     <main className="min-h-screen bg-white text-black">
-      {/* Top Hero Section */}
       <section className="flex flex-col md:flex-row gap-6 max-w-6xl mx-auto py-10 px-5">
         <div className="flex-1">
           <h1 className="text-4xl font-bold mb-4">
@@ -145,7 +156,6 @@ export default async function PlanDetailPage({
           </a>
         </div>
 
-        {/* Image */}
         <div className="flex-1 md:max-w-sm">
           <Image
             src={
@@ -160,7 +170,6 @@ export default async function PlanDetailPage({
         </div>
       </section>
 
-      {/* Quick Hitter Info Grid */}
       <QuickHitterGrid plan={plan} />
     </main>
   );
