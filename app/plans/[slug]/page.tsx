@@ -1,6 +1,6 @@
 // app/plans/[slug]/page.tsx
 
-import { PageProps } from "@/.next/types/app/layout";
+import { PageProps } from "@/.next/types/app/page";
 import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import Image from "next/image";
