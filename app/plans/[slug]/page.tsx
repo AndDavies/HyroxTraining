@@ -66,6 +66,13 @@ function QuickHitterGrid({ plan }: { plan: Plan }) {
   );
 }
 
+// 1) Define an explicit type for the props you expect
+interface PlanDetailPageProps {
+  params: {
+    slug: string;
+  };
+}
+
 // If you plan to generate dynamic metadata for SEO
 export async function generateMetadata({
   params,
