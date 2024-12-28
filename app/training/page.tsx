@@ -9,7 +9,7 @@ export const metadata = {
       <main style={{ padding: "2rem" }}>
         <h1>Hyrox Training Plans</h1>
         <p>
-          Whether you're new to Hyrox or aiming to improve your race time, 
+          Whether you&apos;re new to Hyrox or aiming to improve your race time, 
           these quick plans will get you moving.
         </p>
   
