@@ -2,7 +2,24 @@ import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import Image from "next/image";
 
-function QuickHitterGrid({ plan }: { plan: any }) {
+interface Plan {
+  id: string;
+  title: string;
+  category?: string;
+  fitness_level?: string;
+  daily_training_time?: string;
+  sessions_per_day?: string;
+  days_per_week?: string;
+  hours_per_week?: string;
+  price_text?: string;
+  external_link?: string;
+  main_image_url?: string;
+  coaches?: string[];
+  description?: string;
+  // add any other fields you have in "training_plans"
+}
+
+function QuickHitterGrid({ plan }: { plan: Plan }) {
   // Construct an array of label/value pairs
   const quickHitters = [
     { label: "Category", value: plan.category },
