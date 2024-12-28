@@ -129,7 +129,7 @@ export default async function HomePage() {
         allGyms={gyms ?? []}
         cityOptions={cityOptions}
         countryOptions={countryOptions}
-      />
+      /> 
     </main>
   );
 }
