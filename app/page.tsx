@@ -32,14 +32,14 @@ export default async function HomePage() {
   //    We assume columns: id, name, address, image_url, city, country
   const { data: gyms, error: gymsError } = await supabase
     .from("gyms")
-    .select("id, name, address, image_url, city, country")
-    .order("name");
+    .select("id, store, address, thumb, city, country")
+    .order("store");
 
   if (gymsError) {
     console.error("Gyms fetch error:", gymsError);
   }
 
-  // 2) Build unique city and country lists in memory
+  // 2) Build uniquesto city and country lists in memory
   //    This avoids any .distinct() usage which isn't in the current JS client.
   const uniqueCities = new Set<string>();
   const uniqueCountries = new Set<string>();

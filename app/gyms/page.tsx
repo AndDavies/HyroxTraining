@@ -18,7 +18,7 @@ export default async function GymsPage() {
   // Fetch data at build or request time
   const { data: gyms, error } = await supabase
     .from("gyms")
-    .select("id,name,address_line,city,country,image_url")
+    .select("id,store,address_line,city,country,image_url")
     .order("name");
 
   if (!gyms || error) {
@@ -39,13 +39,13 @@ export default async function GymsPage() {
             {gym.image_url && (
               <Image
                 src={gym.image_url}
-                alt={gym.name}
+                alt={gym.store}
                 width={800}
                 height={600}
                 className="w-full h-48 object-cover rounded"
               />              
             )}
-            <h2 className="text-lg font-semibold mt-3">{gym.name}</h2>
+            <h2 className="text-lg font-semibold mt-3">{gym.store}</h2>
             <p className="text-sm text-gray-600">
               {gym.address_line}, {gym.city}, {gym.country}
             </p>

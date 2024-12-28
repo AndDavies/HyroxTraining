@@ -6,11 +6,11 @@ import Image from "next/image";
 
 interface Gym {
   id: string;
-  name: string;
+  store: string;
   address?: string;
   city?: string;
   country?: string;
-  image_url?: string;
+  thumb?: string;
 }
 
 interface Props {
@@ -41,7 +41,7 @@ export default function GymsTrainingClient({
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      result = result.filter((gym) => gym.name.toLowerCase().includes(q));
+      result = result.filter((gym) => gym.store.toLowerCase().includes(q));
     }
 
     setFilteredGyms(result);
@@ -168,17 +168,17 @@ export default function GymsTrainingClient({
               >
                 {/* Image area: fixed height, object-cover */}
                 <div className="relative w-full h-48 bg-gray-200">
-                  {gym.image_url ? (
+                  {gym.thumb ? (
                     <Image
-                      src={gym.image_url}
-                      alt={gym.name}
+                      src={gym.thumb}
+                      alt={gym.store}
                       fill
                       className="object-cover"
                     />
                   ) : (
                     <Image
-                      src="https://via.placeholder.com/800x600?text=Gym+Placeholder"
-                      alt={gym.name}
+                      src="/placeholder_1.jpg"
+                      alt={gym.store}
                       fill
                       className="object-cover"
                     />
@@ -187,7 +187,7 @@ export default function GymsTrainingClient({
 
                 {/* Info */}
                 <div className="p-4 text-left">
-                  <h3 className="text-lg font-bold mb-1">{gym.name}</h3>
+                  <h3 className="text-lg font-bold mb-1">{gym.store}</h3>
                   {gym.address && (
                     <p className="text-gray-600 mb-2">{gym.address}</p>
                   )}
