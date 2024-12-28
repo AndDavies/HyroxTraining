@@ -1,7 +1,12 @@
+// app/plans/[slug]/page.tsx
 import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import Image from "next/image";
 
+/** 
+ * Define the shape of data from `training_plans`.
+ * Tweak as needed for your actual DB columns.
+ */
 interface Plan {
   id: string;
   title: string;
@@ -16,11 +21,21 @@ interface Plan {
   main_image_url?: string;
   coaches?: string[];
   description?: string;
-  // add any other fields you have in "training_plans"
+}
+
+/** 
+ * Next.js 13+ expects your dynamic route to accept
+ * an object with `params: { slug: string }`.
+ * We'll reuse this interface in both `PlanDetailPage` & `generateMetadata`.
+ */
+interface PlanDetailPageProps {
+  params: {
+    slug: string;
+  };
 }
 
 function QuickHitterGrid({ plan }: { plan: Plan }) {
-  // Construct an array of label/value pairs
+  // An array of label/value pairs for the plan
   const quickHitters = [
     { label: "Category", value: plan.category },
     { label: "Fitness Level", value: plan.fitness_level },
@@ -32,7 +47,6 @@ function QuickHitterGrid({ plan }: { plan: Plan }) {
   ];
 
   return (
-    // Subtle gradient background from left to right
     <section className="w-full py-10 px-6 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white">
       <h2 className="text-3xl font-bold text-center mb-8">
         Details for {plan.title}
@@ -66,19 +80,10 @@ function QuickHitterGrid({ plan }: { plan: Plan }) {
   );
 }
 
-// 1) Define an explicit type for the props you expect
-interface PlanDetailPageProps {
-  params: {
-    slug: string;
-  };
-}
-
 // If you plan to generate dynamic metadata for SEO
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: PlanDetailPageProps
+): Promise<Metadata> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -102,12 +107,13 @@ export async function generateMetadata({
   };
 }
 
-// SSR route
-export default async function PlanDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+/**
+ * The SSR page function for /plans/[slug].
+ * 
+ * Now we explicitly use `PlanDetailPageProps` so that TypeScript sees
+ * the `params: { slug: string }` is the correct shape and not "unused".
+ */
+export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
   const { slug } = params;
 
   // 1) Create Supabase client for SSR
