@@ -1,4 +1,5 @@
 // app/components/Header.tsx
+import Image from "next/image";
 // (No "use client" because we want it rendered on the server for SEO)
 
 export default function Header() {
@@ -9,9 +10,11 @@ export default function Header() {
           {/* Left: Logo */}
           <div className="flex items-center space-x-2">
             {/* Replace with your actual logo/image if desired */}
-            <img
+            <Image
               src="/logo/peak_logo_white.png"
               alt="Peak Metrix"
+              width={800}
+              height={600}
               className="h-6 w-auto object-contain"
             />
             <span className="font-bold text-lg tracking-tight">Hyrox Training Hub</span>

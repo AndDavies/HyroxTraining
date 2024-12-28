@@ -1,4 +1,5 @@
 // app/components/Footer.tsx
+import Image from "next/image";
 
 export default function Footer() {
     return (
@@ -7,11 +8,13 @@ export default function Footer() {
           {/* Left: Logo + Rights */}
           <div className="mb-6 md:mb-0 flex flex-col space-y-2">
             <div className="flex items-center space-x-2">
-              <img
-                src="/logo/peak_logo_black.png"
-                alt="Peak Metrix"
-                className="h-6 w-auto object-contain"
-              />
+            <Image
+              src="/logo/peak_logo_black.png"
+              alt="Peak Metrix"
+              width={800}
+              height={600}
+              className="h-6 w-auto object-contain"
+            />
               <span className="font-bold text-lg tracking-tight">Hyrox Training Hub</span>
             </div>
             <p className="text-sm">

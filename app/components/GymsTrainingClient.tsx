@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import Image from "next/image";
 
 interface Gym {
   id: string;
@@ -165,10 +166,13 @@ export default function TrainingDirectoryClient({
             >
               <div className="w-full h-48 bg-gray-300">
                 {gym.image_url && (
-                  <img
+
+                  <Image
                     src={gym.image_url}
                     alt={gym.name}
-                    className="w-full h-full object-cover"
+                    width={800}
+                    height={600}
+                    className="h-6 w-auto object-contain"
                   />
                 )}
               </div>

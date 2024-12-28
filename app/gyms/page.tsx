@@ -1,6 +1,7 @@
 // app/gyms/page.tsx
 import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next"; // if you want to define SEO metadata
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Explore Gyms – Hyrox Directory",
@@ -36,11 +37,13 @@ export default async function GymsPage() {
         {gyms.map((gym) => (
           <div key={gym.id} className="bg-white rounded-xl shadow p-4">
             {gym.image_url && (
-              <img
+              <Image
                 src={gym.image_url}
                 alt={gym.name}
+                width={800}
+                height={600}
                 className="w-full h-48 object-cover rounded"
-              />
+              />              
             )}
             <h2 className="text-lg font-semibold mt-3">{gym.name}</h2>
             <p className="text-sm text-gray-600">

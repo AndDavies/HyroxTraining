@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import Image from "next/image";
 
 interface Plan {
   id: string;
@@ -156,15 +157,20 @@ export default function TrainingPlansClient({ allPlans }: TrainingPlansClientPro
               {/* Plan Image */}
               <div className="w-full h-48 bg-gray-300">
                 {plan.main_image_url ? (
-                  <img
+                  <Image
                     src={plan.main_image_url}
                     alt={plan.title}
+                    width={800}
+                    height={600}
                     className="w-full h-full object-cover"
                   />
+                     
                 ) : (
-                  <img
+                  <Image
                     src="https://via.placeholder.com/600x400?text=Plan"
-                    alt="Placeholder"
+                    alt="Hyrox Training Hub"
+                    width={800}
+                    height={600}
                     className="w-full h-full object-cover"
                   />
                 )}

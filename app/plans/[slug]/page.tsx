@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
+import Image from "next/image";
 
 function QuickHitterGrid({ plan }: { plan: any }) {
   // Construct an array of label/value pairs
@@ -129,11 +130,13 @@ export default async function PlanDetailPage({
         {/* Image Column */}
         <div className="flex-1 md:max-w-sm">
           {/* If no main_image_url, show a placeholder */}
-          <img
+          <Image
             src={
               plan.main_image_url ||
               "https://via.placeholder.com/600x400?text=Training+Plan+Placeholder"
             }
+            width={800}
+            height={600}
             alt={plan.title}
             className="w-full h-auto object-cover rounded shadow"
           />
