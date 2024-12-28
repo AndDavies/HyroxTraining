@@ -1,14 +1,9 @@
 // app/plans/[slug]/page.tsx
-
-// -- DISABLE ALL TS CHECKING FOR THIS FILE --
-// @ts-nocheck
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import Image from "next/image";
 
+// For clarity, define our Plan type (for the DB data).
 interface Plan {
   id: string;
   title: string;
@@ -25,13 +20,7 @@ interface Plan {
   description?: string;
 }
 
-// We define, but we won't let TS actually type-check it.
-interface PlanDetailPageProps {
-  params: {
-    slug: string;
-  };
-}
-
+// QuickHitterGrid is a normal component that takes a Plan object
 function QuickHitterGrid({ plan }: { plan: Plan }) {
   const quickHitters = [
     { label: "Category", value: plan.category },
@@ -75,12 +64,14 @@ function QuickHitterGrid({ plan }: { plan: Plan }) {
   );
 }
 
-// If you plan to generate dynamic metadata for SEO
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+/**
+ * If you plan to generate dynamic metadata for SEO,
+ * we inline the param type here as well. 
+ */
+export async function generateMetadata(
+  // Inline type for param: no separate interface
+  { params }: { params: { slug: string } }
+): Promise<Metadata> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -104,13 +95,23 @@ export async function generateMetadata({
   };
 }
 
-export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
+/**
+ * The page function for /plans/[slug].
+ * We inline the param type here as well, matching Next.js 13 expectations.
+ */
+export default async function PlanDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const { slug } = params;
 
+  // Create Supabase client for SSR
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  // Fetch the plan by slug
   const { data: plan, error } = await supabase
     .from("training_plans")
     .select("*")
@@ -127,6 +128,7 @@ export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
 
   return (
     <main className="min-h-screen bg-white text-black">
+      {/* Top Hero Section */}
       <section className="flex flex-col md:flex-row gap-6 max-w-6xl mx-auto py-10 px-5">
         <div className="flex-1">
           <h1 className="text-4xl font-bold mb-4">
@@ -143,6 +145,7 @@ export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
           </a>
         </div>
 
+        {/* Image */}
         <div className="flex-1 md:max-w-sm">
           <Image
             src={
@@ -157,6 +160,7 @@ export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
         </div>
       </section>
 
+      {/* Quick Hitter Info Grid */}
       <QuickHitterGrid plan={plan} />
     </main>
   );
