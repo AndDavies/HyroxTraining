@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 export default async function GymsPage() {
   // Because this is a server component, you can safely use your
   // service role key or an anon key for read queries, *server-side*.
-  const supabaseUrl = process.env.SUPABASE_URL!;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY!; // or anon if read is open
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!; // or anon if read is open
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   // Fetch data at build or request time
